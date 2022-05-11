@@ -21,3 +21,4 @@ vue cli 5.0
 直接选择 vue3.0模板
 
 4.切换文件路径，后cnpm run serve
+
