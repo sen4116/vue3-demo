@@ -85,3 +85,23 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
       - 如果`Vue2.0`中配置的数据或是方法与`Vue3.0`有重名，则`Vue3.0`优先
    2. `setup`不能是一个`async`函数,因为返回值不再是return的对象，而是promise，模板看不到return对象中的属性
 
+
+
+
+
+## 2.`ref`函数
+
+- 作用：定义一个响应式数据
+- 语法：`const xxx = ref(initValue)`
+  - 创建一个包含响应式数据的<font color=red>引用对象（reference）</font>
+  - `JS`中操作数据 `xxx.value`
+  - 模板中读取数据： 不需要`xxx.value`,直接：`<div>{{xxx}}</div>`
+- <font color=green>备注</font>
+  - 接收的数据（`initValue`）可以是: 基本类型、也可以是对象类型。
+  - 基本类型的数据：响应式依然是靠`Object.defineProperty()`的`get`和`set`完成的。
+  - 对象类型的数据：内部是引用了`vue3`中的`reactive`函数
+
+
+
+## 3.`reactive`函数
+
