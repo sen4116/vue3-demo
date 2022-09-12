@@ -105,3 +105,44 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## 3.`reactive`函数
 
+- 作用：定义一个对象类型的响应式数据（基本类型不要用它，要用ref函数）
+
+```
+javaScript共有7种基本类型：string，number，bigint，boolean，null，undefined，symbol
+```
+
+- 语法：`const 代理对象 = reactive(原对象)`接收一个对象（或数组），返回一个代理对象（proxy对象）
+- reactive定义的响应式数据是”深层次的“
+- 内部基于`ES6`的Proxy实现，通过代理对象操作原对象内部数据进行操作
+
+```js
+import {ref,reactive} from 'vue'
+	export default {
+		setup() {
+			let person = reactive({
+				name : '陈平安',
+				age: 18,
+				a:{
+					b:{
+						c:100
+					}
+				},
+				hobby:['抽烟','喝酒','烫头']
+			})
+			function setProsen(){
+				console.log(person)
+				person.name = '崔巉'
+				person.age = 30
+				person.a.b.c += 100
+				person.hobby[0]="打球"
+                // 在 vue2是不能通过数组的索引值去改变值，但是vue3可以
+			}
+			//返回一个对象
+			return {
+				person,
+				setProsen
+			}
+		}
+	}
+```
+
