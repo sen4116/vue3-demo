@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			let person = {
+				name: '陈平安',
+				age:18
+			}
+			
+			// vue2数据响应式原理
+			let p = { }
+			// 只能做到，对象中已知数据的读取和改变
+			for (let i in person){
+				Object.defineProperty( p, i ,{
+					get(){ //访问p的name属性就会触发
+						return person[i]
+						console.log('p的属性被访问了')
+					},
+					set(newValue,oldValue){
+						person[i] = newValue
+						console.log(`p.${i}现在的值是：${newValue}` )
+					}
+				})
+			}
+			
+			// 模拟Vue3数据响应式原理
+			const p3 = new Proxy(person,{
+				get(target,propName) { //读取操作
+					console.log(`有人读取了p身上的数据${propName}属性`)
+					return target[propName]
+				},
+				set(target,propName,value) { //修改或是添加属性都能监听到
+					console.log(`有人修改了p身上的数据${propName}属性`)
+					target[propName] = value
+				},
+				deleteProperty(target,propName) { //删除操作
+					console.log(`有人删除了p身上的数据${propName}属性`)
+					return delete target[propName]
+				}
+			})
+			
+			/**
+			 * 如果直接用proxy进行代理，没有在第二个形参对象中，进行监听配置，
+			 * 这样只是做到了对数据的映射，并没有实现对代理数据操作过中的监听
+			 * 
+			 * 使用proxy时，在对原数据进行的操作都不会被监听，但是会映射到代理的实例对象中
+			 * 
+			 * */
+		</script>
+	</body>
+</html>
