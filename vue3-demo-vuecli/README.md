@@ -173,3 +173,30 @@ import {ref,reactive} from 'vue'
 
 `vue3.0`的响应式:
 
+- 实现原理：
+
+  - 通过Proxy(代理)：拦截对象中任意属性的变化，包括：属性值的读写、属性的添加，属性的删除等
+  - 通过Reflect(反射)：对被代理对象的属性进行操作。
+
+  ```
+  new Proxy(person,{
+      get(target,propName) { //读取操作
+          console.log(`有人读取了p身上的数据${propName}属性`)
+          // return target[propName]
+          return Reflect.get(target,propName)
+      },
+      set(target,propName,value) { //修改或是添加属性都能监听到
+          console.log(`有人修改了p身上的数据${propName}属性`)
+          // target[propName] = value
+          Reflect.set(target,propName,value)
+      },
+      deleteProperty(target,propName) { //删除操作
+          console.log(`有人删除了p身上的数据${propName}属性`)
+          // return delete target[propName]
+          return Reflect.deleteProperty(target,propName)
+      }
+  })
+  ```
+
+  
+

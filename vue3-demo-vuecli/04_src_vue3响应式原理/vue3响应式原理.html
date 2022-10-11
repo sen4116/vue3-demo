@@ -27,19 +27,22 @@
 				})
 			}
 			
-			// 模拟Vue3数据响应式原理
+			// 模拟Vue3数据响应式原理 proxy: 映射 reflect： 反射
 			const p3 = new Proxy(person,{
 				get(target,propName) { //读取操作
 					console.log(`有人读取了p身上的数据${propName}属性`)
-					return target[propName]
+					// return target[propName]
+					return Reflect.get(target,propName)
 				},
 				set(target,propName,value) { //修改或是添加属性都能监听到
 					console.log(`有人修改了p身上的数据${propName}属性`)
-					target[propName] = value
+					// target[propName] = value
+					Reflect.set(target,propName,value)
 				},
 				deleteProperty(target,propName) { //删除操作
 					console.log(`有人删除了p身上的数据${propName}属性`)
-					return delete target[propName]
+					// return delete target[propName]
+					return Reflect.deleteProperty(target,propName)
 				}
 			})
 			
@@ -50,6 +53,54 @@
 			 * 使用proxy时，在对原数据进行的操作都不会被监听，但是会映射到代理的实例对象中
 			 * 
 			 * */
+			 
+			
+			let obj = {a:1,b:2}
+			 
+			/**
+			 * 在window身上有Reflect属性    target：反射的目标
+			 * 可以通过Reflect属性中get(target,'target.key') 获取值
+			 * 也可以通过Reflect属性中set(target,'target.key',value) 修改值 
+			 * 也可以使用通过Reflect.deleteProperty(target,'target.key') 删除值 
+			 * */
+			  
+			// try{
+			// 	Object.defineProperty(obj,'c',{
+			// 		get() {
+			// 			return 3
+			// 		}
+			// 	})
+			// 	Object.defineProperty(obj,'c',{
+			// 		get() {
+			// 			return 100
+			// 		}
+			// 	})
+			// }catch(error){
+			// 	console.log(error)
+			// }
+			
+			// let x = Reflect.defineProperty(obj,'c',{
+			// 	get() {
+			// 		return 6
+			// 	}
+			// })
+			// console.log(x)
+			// let x1 = Reflect.defineProperty(obj,'c',{
+			// 	get() {
+			// 		return 100
+			// 	}
+			// })
+			// console.log(x1)
+			
+			/**
+			 * Object.definePropety(),在往目标添加属性的时，
+			 * 遇到属性命名冲突会直接报错，下面程序都不会继续走下去，
+			 * 只能用try/catch 去接收报错
+			 * 而Reflect.definePropety()，遇到属性命名冲突，下面的程序会继续执行
+			 * 可定义变量去接收返回的是布尔值，可以判断变量从而在控制台输入报错。
+			 * 
+			 * 在封装框架或者组件时，建议使用Reflect
+			 * */ 
 		</script>
 	</body>
 </html>
